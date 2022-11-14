@@ -137,7 +137,7 @@ public class DVDLibraryView {
 
     public void displayTitleChangedSuccess(String newTitle) {
         io.print("Title successfully changed to " + newTitle + "\n");
-        io.readString("Please hit Enter to continue");
+        io.readString("Please hit Enter to continue.");
     }
 
     public void displayEditYearBanner() {
