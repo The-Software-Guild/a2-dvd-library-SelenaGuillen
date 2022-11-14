@@ -34,10 +34,50 @@ public class DVDLibraryDao {
         return new ArrayList<>(dvdList.values());
     }
 
-    public DVD editTitle(String oldTitle, String newTitle) throws DVDLibraryDaoException {
+    public DVD editTitle(String title, String newTitle) throws DVDLibraryDaoException {
         loadDVDLibrary();
-        DVD currentDVD = getDVD(oldTitle);
+        DVD currentDVD = getDVD(title);
         currentDVD.setTitle(newTitle);
+        writeDVDLibrary();
+        return currentDVD;
+    }
+
+    public DVD editYear(String title, int newYear) throws DVDLibraryDaoException{
+        loadDVDLibrary();
+        DVD currentDVD = getDVD(title);
+        currentDVD.setYear(newYear);
+        writeDVDLibrary();
+        return currentDVD;
+    }
+
+    public DVD editMPAARating(String title, String newMPAARating) throws DVDLibraryDaoException {
+        loadDVDLibrary();
+        DVD currentDVD = getDVD(title);
+        currentDVD.setMPAARating(newMPAARating);
+        writeDVDLibrary();
+        return currentDVD;
+    }
+
+    public DVD editDirectorName(String title, String newDirectorName) throws DVDLibraryDaoException {
+        loadDVDLibrary();
+        DVD currentDVD = getDVD(title);
+        currentDVD.setDirectorName(newDirectorName);
+        writeDVDLibrary();
+        return currentDVD;
+    }
+
+    public DVD editStudio(String title, String newStudio) throws DVDLibraryDaoException {
+        loadDVDLibrary();
+        DVD currentDVD = getDVD(title);
+        currentDVD.setStudio(newStudio);
+        writeDVDLibrary();
+        return currentDVD;
+    }
+
+    public DVD editDescription(String title, String newDescription) throws DVDLibraryDaoException {
+        loadDVDLibrary();
+        DVD currentDVD = getDVD(title);
+        currentDVD.setDescription(newDescription);
         writeDVDLibrary();
         return currentDVD;
     }

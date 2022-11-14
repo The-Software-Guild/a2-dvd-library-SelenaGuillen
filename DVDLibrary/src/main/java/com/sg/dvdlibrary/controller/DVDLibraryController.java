@@ -109,19 +109,19 @@ public class DVDLibraryController {
                         editTitle(currentDVD);
                         break;
                     case 2:
-                        System.out.println("edit year");
+                        editYear(currentDVD);
                         break;
                     case 3:
-                        System.out.println("edit mpaa rating");
+                        editMPAARating(currentDVD);
                         break;
                     case 4:
-                        System.out.println("edit dn");
+                        editDirectorName(currentDVD);
                         break;
                     case 5:
-                        System.out.println("edit studio");
+                        editStudio(currentDVD);
                         break;
                     case 6:
-                        search();
+                        editDescription(currentDVD);
                         break;
                     case 7:
                         keepGoing = false;
@@ -136,10 +136,47 @@ public class DVDLibraryController {
 
     }
 
+    //TODO: fix issue where edited dvd gets printed twice
     private void editTitle(DVD dvd) throws DVDLibraryDaoException {
+        view.displayEditTitleBanner();
         String newTitle = view.printEditAndGetNewTitle();
         dao.editTitle(dvd.getTitle(), newTitle);
         view.displayTitleChangedSuccess(newTitle);
+    }
+
+    private void editYear(DVD dvd) throws DVDLibraryDaoException {
+        view.displayEditYearBanner();
+        int newYear = view.printEditAndGetNewYear();
+        dao.editYear(dvd.getTitle(), newYear);
+        view.displayYearChangedSuccess(newYear);
+    }
+
+    private void editMPAARating(DVD dvd) throws DVDLibraryDaoException {
+        view.displayEditMPAARatingBanner();
+        String newMPAARating = view.printEditAndGetNewMPAARating();
+        dao.editMPAARating(dvd.getTitle(), newMPAARating);
+        view.displayMPAARatingChangedSuccess(newMPAARating);
+    }
+
+    private void editDirectorName(DVD dvd) throws DVDLibraryDaoException {
+        view.displayEditDirectorNameBanner();
+        String newDirectorName = view.printEditAndGetNewDirectorName();
+        dao.editDirectorName(dvd.getTitle(), newDirectorName);
+        view.displayDirectorNameChangedSuccess(newDirectorName);
+    }
+
+    private void editStudio(DVD dvd) throws DVDLibraryDaoException {
+        view.displayEditStudioBanner();
+        String newStudio = view.printEditAndGetNewStudio();
+        dao.editStudio(dvd.getTitle(), newStudio);
+        view.displayMPAARatingChangedSuccess(newStudio);
+    }
+
+    private void editDescription(DVD dvd) throws DVDLibraryDaoException {
+        view.displayEditDescriptionBanner();
+        String newDescription = view.printEditAndGetNewDescription();
+        dao.editDescription(dvd.getTitle(), newDescription);
+        view.displayDescriptionChangedSuccess(newDescription);
     }
     private void unknownCommand() {
         view.displayUnknownCommandBanner();

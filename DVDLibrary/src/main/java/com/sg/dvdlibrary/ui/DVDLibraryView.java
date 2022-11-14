@@ -123,7 +123,7 @@ public class DVDLibraryView {
         io.print("4. Edit Director Name");
         io.print("5. Edit Studio");
         io.print("6. Edit Description");
-        io.print("7. Cancel");
+        io.print("7. Cancel and Go Back");
         return io.readInt("Please select from the above choices.", 1, 7);
     }
 
@@ -138,6 +138,71 @@ public class DVDLibraryView {
     public void displayTitleChangedSuccess(String newTitle) {
         io.print("Title successfully changed to " + newTitle + "\n");
         io.readString("Please hit Enter to continue");
+    }
+
+    public void displayEditYearBanner() {
+        io.print("=== Edit Year ===");
+    }
+
+    public int printEditAndGetNewYear() {
+        return io.readInt("Please enter the new year");
+    }
+
+    public void displayYearChangedSuccess(int newYear) {
+        io.print("Year successfully changed to " + newYear + "\n");
+        io.readString("Please hit Enter to continue.");
+    }
+
+    public void displayEditMPAARatingBanner() {
+        io.print("=== Edit MPAA Rating ===");
+    }
+
+    public String printEditAndGetNewMPAARating() {
+        return io.readString("Please enter the new MPAA Rating.");
+    }
+
+    public void displayMPAARatingChangedSuccess(String newMPAARating) {
+        io.print("MPAA Rating successfully changed to " + newMPAARating + "\n");
+        io.readString("Please hit Enter to continue.");
+    }
+
+    public void displayEditDirectorNameBanner() {
+        io.print("=== Edit Director Name ===");
+    }
+
+    public String printEditAndGetNewDirectorName() {
+        return io.readString("Please enter the new Director Name.");
+    }
+
+    public void displayDirectorNameChangedSuccess(String newDirectorName) {
+        io.print("Director Name successfully changed to " + newDirectorName + "\n");
+        io.readString("Please hit Enter to continue.");
+    }
+
+    public void displayEditStudioBanner() {
+        io.print("=== Edit Studio ===");
+    }
+
+    public String printEditAndGetNewStudio() {
+        return io.readString("Please enter the new Studio.");
+    }
+
+    public void displayStudioChangedSuccess(String newStudio) {
+        io.print("Studio successfully changed to " + newStudio + "\n");
+        io.readString("Please hit Enter to continue.");
+    }
+
+    public void displayEditDescriptionBanner() {
+        io.print("=== Edit Description ===");
+    }
+
+    public String printEditAndGetNewDescription() {
+        return io.readString("Please enter the new Description.");
+    }
+
+    public void displayDescriptionChangedSuccess(String newDescription) {
+        io.print("Description successfully changed to " + newDescription + "\n");
+        io.readString("Please hit Enter to continue.");
     }
     public void displayExitBanner() {
         io.print("Good Bye!");
