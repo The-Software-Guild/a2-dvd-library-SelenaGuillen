@@ -6,7 +6,6 @@ import com.sg.dvdlibrary.ui.DVDLibraryView;
 import com.sg.dvdlibrary.ui.UserIO;
 import com.sg.dvdlibrary.ui.UserIOConsoleImpl;
 
-import java.util.List;
 
 public class App {
     public static void main(String[] args) {

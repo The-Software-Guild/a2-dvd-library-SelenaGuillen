@@ -26,7 +26,6 @@ public class DVDLibraryDao {
     }
 
     public DVD getDVD(String title) throws DVDLibraryDaoException {
-        loadDVDLibrary();
         return dvdList.get(title);
     }
     public List<DVD> getAllDVDs() throws DVDLibraryDaoException {

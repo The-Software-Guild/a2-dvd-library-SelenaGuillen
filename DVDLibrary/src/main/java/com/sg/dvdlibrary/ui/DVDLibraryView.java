@@ -26,6 +26,7 @@ public class DVDLibraryView {
 
     }
 
+    //TODO: handle not found for each search attempt using props
     public String getDVDTitleChoice() {
         //TODO: ignore case
         return io.readString("Please enter the title");
@@ -55,10 +56,6 @@ public class DVDLibraryView {
 
     public void displayRemoveDVDBanner() {
         io.print("=== Remove a DVD ===");
-    }
-
-    public void displayRemoveSuccessBanner() {
-        io.readString("DVD removed successfully. Please hit Enter to continue.");
     }
 
     public void displayRemoveResult(DVD dvd) {
