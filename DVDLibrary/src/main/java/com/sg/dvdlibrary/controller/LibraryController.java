@@ -4,14 +4,19 @@ import com.sg.dvdlibrary.dao.DVDLibraryDao;
 import com.sg.dvdlibrary.dao.DVDLibraryDaoException;
 import com.sg.dvdlibrary.dto.DVD;
 import com.sg.dvdlibrary.ui.DVDLibraryView;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 
-public class DVDLibraryController {
+@Component
+public class LibraryController {
     private DVDLibraryDao dao;
     private DVDLibraryView view;
 
-    public DVDLibraryController(DVDLibraryDao dao, DVDLibraryView view) {
+    @Autowired
+    public LibraryController(DVDLibraryDao dao, DVDLibraryView view) {
         this.dao = dao;
         this.view = view;
     }
@@ -85,10 +90,44 @@ public class DVDLibraryController {
     }
 
     private void search() throws DVDLibraryDaoException {
-        view.displaySearchResultBanner();
-        List<DVD> dvdList = dao.getAllDVDs();
-        String title = view.getDVDTitleChoice();
-        view.displaySearchResults(dvdList, title);
+        view.displaySearchBanner();
+        //Menu Options
+        boolean keepGoing = true;
+        int menuSelection = 0;
+        try {
+            while (keepGoing) {
+                menuSelection = view.printSearchMenuAndGetSelection();
+
+                DVD dvd = dao.getDVD("Joker");
+                switch(menuSelection) {
+                    case 1:
+                        searchByNYears();
+                        break;
+                    case 2:
+                        searchByMPAARating();
+                        break;
+                    case 3:
+                        searchByDirectorName();
+                        break;
+                    case 4:
+                        System.out.println("studio");
+                        break;
+                    case 5:
+                        System.out.println("newest");
+                        break;
+                    case 6:
+                        System.out.println("oldest");
+                        break;
+                    case 7:
+                        keepGoing = false;
+                        break;
+                    default:
+                        unknownCommand();
+                }
+            }
+        } catch (DVDLibraryDaoException e) {
+            view.displayErrorMessage(e.getMessage());
+        }
     }
 
     private void edit() throws DVDLibraryDaoException {
@@ -145,9 +184,9 @@ public class DVDLibraryController {
 
     private void editYear(DVD dvd) throws DVDLibraryDaoException {
         view.displayEditYearBanner();
-        int newYear = view.printEditAndGetNewYear();
-        dao.editYear(dvd.getTitle(), newYear);
-        view.displayYearChangedSuccess(newYear);
+        LocalDate newReleaseDate = view.printEditAndGetNewDate();
+        dao.editReleaseDate(dvd.getTitle(), newReleaseDate);
+        view.displayDateChangedSuccess(newReleaseDate);
     }
 
     private void editMPAARating(DVD dvd) throws DVDLibraryDaoException {
@@ -177,6 +216,26 @@ public class DVDLibraryController {
         dao.editDescription(dvd.getTitle(), newDescription);
         view.displayDescriptionChangedSuccess(newDescription);
     }
+
+    private void searchByNYears() throws DVDLibraryDaoException {
+        view.displaySearchResultBanner();
+        int years = view.printAndCollectNYears();
+        List<DVD> searchResults = dao.findMoviesReleasedNYears(years);
+        view.displaySearchResults(searchResults);
+    }
+    private void searchByMPAARating() throws DVDLibraryDaoException {
+        view.displaySearchResultBanner();
+        String mpaaRating = view.printAndCollectRating();
+        List<DVD> searchResults = dao.findByMPAARating(mpaaRating);
+        view.displaySearchResults(searchResults);
+    }
+    private void searchByDirectorName() throws DVDLibraryDaoException {
+        view.displaySearchResultBanner();
+        String directorName = view.printAndCollectDN();
+        List<DVD> searchResults = dao.findByDirector(directorName);
+        view.displaySearchResults(searchResults);
+    }
+
     private void unknownCommand() {
         view.displayUnknownCommandBanner();
     }

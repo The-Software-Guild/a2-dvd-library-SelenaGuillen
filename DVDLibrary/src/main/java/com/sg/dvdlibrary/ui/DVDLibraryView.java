@@ -2,12 +2,17 @@ package com.sg.dvdlibrary.ui;
 
 
 import com.sg.dvdlibrary.dto.DVD;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 
+@Component
 public class DVDLibraryView {
     private UserIO io;
 
+    @Autowired
     public DVDLibraryView(UserIO io) {
         this.io = io;
     }
@@ -19,7 +24,7 @@ public class DVDLibraryView {
         io.print("3. Edit a DVD");
         io.print("4. List all DVDs");
         io.print("5. Display Information for a DVD");
-        io.print("6. Search for a DVD by Title");
+        io.print("6. Search for a DVD");
         io.print("7. Exit");
 
         return io.readInt("Please select from the above choices: ", 1, 7);
@@ -39,14 +44,14 @@ public class DVDLibraryView {
     }
     public DVD getNewDVDInfo() {
         String title = io.readString("Please enter the title");
-        String year = io.readString("Please enter the year released");
+        LocalDate releaseDate = LocalDate.parse(io.readString("Please enter the date released in the format yyyy-mm-dd"));
         String mpaaRating = io.readString("Please enter the MPAA rating");
         String directorName = io.readString("Please enter the director's name");
         String studio = io.readString("Please enter the studio");
         String description = io.readString("Please enter a short description");
 
         DVD currentDVD = new DVD(title);
-        currentDVD.setYear(Integer.parseInt(year));
+        currentDVD.setReleaseDate(releaseDate);
         currentDVD.setMPAARating(mpaaRating);
         currentDVD.setDirectorName(directorName);
         currentDVD.setStudio(studio);
@@ -71,11 +76,11 @@ public class DVDLibraryView {
         io.print("=== DVD Information ===");
     }
     public void displayDVDInformation(DVD dvd) {
-        String dvdInfo = String.format("%s \n------------------\nYear Released: %s " +
+        String dvdInfo = String.format("%s \n------------------\nDate Released: %s " +
                         "\nMPAA Rating: %s\nDirector Name: %s\n" +
                         "Studio: %s\nDescription: %s\n",
                 dvd.getTitle(),
-                dvd.getYear(),
+                dvd.getReleaseDate(),
                 dvd.getMPAARating(),
                 dvd.getDirectorName(),
                 dvd.getStudio(),
@@ -89,7 +94,7 @@ public class DVDLibraryView {
     }
     public void displayDVDList(List<DVD> dvdList) {
         for (DVD currentDVD : dvdList) {
-            io.print(currentDVD.getTitle() + " (" + currentDVD.getYear() + ")");
+            io.print(currentDVD.getTitle() + " (" + currentDVD.getReleaseDate() + ")");
         }
         io.readString("Please hit Enter to continue");
     }
@@ -97,12 +102,26 @@ public class DVDLibraryView {
     public void displaySearchResultBanner() {
         io.print("=== Search Results ===");
     }
+    public void displaySearchBanner() {
+        io.print("=== Search ===");
+    }
+
+    public int printSearchMenuAndGetSelection() {
+        io.print("1. Find all movies released in the last N years");
+        io.print("2. Search by MPAA Rating");
+        io.print("3. Search by Director name");
+        io.print("4. Search by Studio");
+        io.print("5. Find Newest Movie");
+        io.print("6. Find Oldest Movie");
+        io.print("7. Cancel and Go Back");
+        return io.readInt("Please select from the above choices.", 1, 7);
+    }
 
     public void displaySearchResults(List<DVD> dvdList, String title) {
         int count = 1;
         for (DVD currentDVD: dvdList) {
             if (currentDVD.getTitle().equalsIgnoreCase(title)) {
-                io.print(count + ". " + currentDVD.getTitle() + " (" + currentDVD.getYear() + ")");
+                io.print(count + ". " + currentDVD.getTitle() + " (" + currentDVD.getReleaseDate() + ")");
                 count++;
             }
         }
@@ -115,7 +134,7 @@ public class DVDLibraryView {
 
     public int printEditMenuAndGetSelection() {
         io.print("1. Edit Title");
-        io.print("2. Edit Year");
+        io.print("2. Edit Date Released");
         io.print("3. Edit MPAA Rating");
         io.print("4. Edit Director Name");
         io.print("5. Edit Studio");
@@ -138,15 +157,15 @@ public class DVDLibraryView {
     }
 
     public void displayEditYearBanner() {
-        io.print("=== Edit Year ===");
+        io.print("=== Edit Date Released ===");
     }
 
-    public int printEditAndGetNewYear() {
-        return io.readInt("Please enter the new year");
+    public LocalDate printEditAndGetNewDate() {
+        return LocalDate.parse(io.readString("Please enter the date released in the format yyyy-mm-dd"));
     }
 
-    public void displayYearChangedSuccess(int newYear) {
-        io.print("Year successfully changed to " + newYear + "\n");
+    public void displayDateChangedSuccess(LocalDate newDate) {
+        io.print("Date successfully changed to " + newDate + "\n");
         io.readString("Please hit Enter to continue.");
     }
 
@@ -200,6 +219,27 @@ public class DVDLibraryView {
     public void displayDescriptionChangedSuccess(String newDescription) {
         io.print("Description successfully changed to " + newDescription + "\n");
         io.readString("Please hit Enter to continue.");
+    }
+
+    public void displaySearchResults(List<DVD> dvdList) {
+        int count = 1;
+        for (DVD currentDVD: dvdList) {
+            io.print(count + ". " + currentDVD.getTitle() + " (" + currentDVD.getReleaseDate() + ")");
+            count++;
+        }
+        io.readString("Please hit Enter to continue.");
+    }
+
+    public int printAndCollectNYears() {
+        return io.readInt("Please enter the number of years to go back.");
+    }
+
+    public String printAndCollectRating() {
+        return io.readString("Please enter the MPAA Rating.");
+    }
+
+    public String printAndCollectDN() {
+        return io.readString("Please enter the director's name");
     }
     public void displayExitBanner() {
         io.print("Good Bye!");

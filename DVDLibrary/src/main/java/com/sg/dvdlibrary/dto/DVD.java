@@ -1,8 +1,10 @@
 package com.sg.dvdlibrary.dto;
 
+import java.time.LocalDate;
+
 public class DVD {
     private String title;
-    private int year;
+    private LocalDate releaseDate;
     private String mpaaRating;
     private String directorName;
     private String studio;
@@ -20,12 +22,12 @@ public class DVD {
         this.title = title;
     }
 
-    public int getYear() {
-        return year;
+    public LocalDate getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     public String getMPAARating() {

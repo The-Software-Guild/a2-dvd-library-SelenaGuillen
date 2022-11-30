@@ -1,10 +1,15 @@
 package com.sg.dvdlibrary.dao;
 
 import com.sg.dvdlibrary.dto.DVD;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
+import java.util.stream.Collectors;
 
+@Component
 public class DVDLibraryDao {
     public static final String DVD_FILE = "DVDLibrary.txt";
     public static final String DELIMITER = "::";
@@ -26,6 +31,7 @@ public class DVDLibraryDao {
     }
 
     public DVD getDVD(String title) throws DVDLibraryDaoException {
+        loadDVDLibrary();
         return dvdList.get(title);
     }
     public List<DVD> getAllDVDs() throws DVDLibraryDaoException {
@@ -41,10 +47,10 @@ public class DVDLibraryDao {
         return currentDVD;
     }
 
-    public DVD editYear(String title, int newYear) throws DVDLibraryDaoException{
+    public DVD editReleaseDate(String title, LocalDate newDate) throws DVDLibraryDaoException{
         loadDVDLibrary();
         DVD currentDVD = getDVD(title);
-        currentDVD.setYear(newYear);
+        currentDVD.setReleaseDate(newDate);
         writeDVDLibrary();
         return currentDVD;
     }
@@ -80,6 +86,37 @@ public class DVDLibraryDao {
         writeDVDLibrary();
         return currentDVD;
     }
+
+    public List<DVD> findMoviesReleasedNYears(long years) throws DVDLibraryDaoException{
+        loadDVDLibrary();
+        LocalDate now = LocalDate.now();
+        LocalDate startDate = now.minusYears(years);
+        List<DVD> dvds = new ArrayList<>(dvdList.values());
+        List<DVD> searchResults = dvds.stream()
+                .filter((dvd -> dvd.getReleaseDate().isAfter(startDate)))
+                .collect(Collectors.toList());
+        return searchResults;
+    }
+
+    public List<DVD> findByMPAARating(String mpaaRating) throws DVDLibraryDaoException {
+        loadDVDLibrary();
+        List<DVD> dvds = new ArrayList<>(dvdList.values());
+        List<DVD> searchResults = dvds.stream()
+                .filter((dvd -> dvd.getMPAARating().equalsIgnoreCase(mpaaRating)))
+                .collect(Collectors.toList());
+        return searchResults;
+    }
+
+    public List<DVD> findByDirector(String directorName) throws DVDLibraryDaoException {
+        loadDVDLibrary();
+        List<DVD> dvds = new ArrayList<>(dvdList.values());
+        List<DVD> searchResults = dvds.stream()
+                .filter((dvd -> dvd.getDirectorName().equalsIgnoreCase(directorName)))
+                .collect(Collectors.toList());
+        return searchResults;
+    }
+
+
     //Data Persistence
     private DVD unmarshallDVD(String dvdAsText) {
         String[] dvdTokens = dvdAsText.split(DELIMITER);
@@ -87,7 +124,9 @@ public class DVDLibraryDao {
 
         DVD dvdFromFile = new DVD(title);
 
-        dvdFromFile.setYear(Integer.parseInt(dvdTokens[1]));
+        LocalDate releaseDate = LocalDate.parse(dvdTokens[1]);
+
+        dvdFromFile.setReleaseDate(releaseDate);
         dvdFromFile.setMPAARating(dvdTokens[2]);
         dvdFromFile.setDirectorName(dvdTokens[3]);
         dvdFromFile.setStudio(dvdTokens[4]);
@@ -95,6 +134,7 @@ public class DVDLibraryDao {
 
         return dvdFromFile;
     }
+
 
     private void loadDVDLibrary() throws DVDLibraryDaoException {
         Scanner scanner;
@@ -122,7 +162,7 @@ public class DVDLibraryDao {
 
     private String marshallDVD(DVD dvd) {
         String dvdAsText = dvd.getTitle() + DELIMITER;
-        dvdAsText += dvd.getYear() + DELIMITER;
+        dvdAsText += dvd.getReleaseDate() + DELIMITER;
         dvdAsText += dvd.getMPAARating() + DELIMITER;
         dvdAsText += dvd.getDirectorName() + DELIMITER;
         dvdAsText += dvd.getStudio() + DELIMITER;
