@@ -80,7 +80,6 @@ public class DVDLibraryDao {
     }
 
     public DVD editDescription(String title, String newDescription) throws DVDLibraryDaoException {
-        loadDVDLibrary();
         DVD currentDVD = getDVD(title);
         currentDVD.setDescription(newDescription);
         writeDVDLibrary();
@@ -114,6 +113,55 @@ public class DVDLibraryDao {
                 .filter((dvd -> dvd.getDirectorName().equalsIgnoreCase(directorName)))
                 .collect(Collectors.toList());
         return searchResults;
+    }
+
+    public List<DVD> findByStudio(String studio) throws DVDLibraryDaoException {
+        loadDVDLibrary();
+        List<DVD> dvds = new ArrayList<>(dvdList.values());
+        List<DVD> searchResults = dvds.stream()
+                .filter((dvd -> dvd.getStudio().equalsIgnoreCase(studio)))
+                .collect(Collectors.toList());
+        return searchResults;
+    }
+
+    public List<DVD> findOldest() throws DVDLibraryDaoException{
+        loadDVDLibrary();
+        List<DVD> dvds = new ArrayList<>(dvdList.values());
+        List<LocalDate> dates = new ArrayList<>();
+
+        for (DVD dvd: dvds) {
+            dates.add(dvd.getReleaseDate());
+        }
+
+        LocalDate oldest = dates.stream()
+                .min(Comparator.comparing(LocalDate::toEpochDay)).get();
+
+        List<DVD> oldestDVDs = dvds.stream()
+                .filter((dvd -> dvd.getReleaseDate().isEqual(oldest)))
+                .collect(Collectors.toList());
+
+        return oldestDVDs;
+
+    }
+
+    public List<DVD> findNewest() throws DVDLibraryDaoException{
+        loadDVDLibrary();
+        List<DVD> dvds = new ArrayList<>(dvdList.values());
+        List<LocalDate> dates = new ArrayList<>();
+
+        for (DVD dvd: dvds) {
+            dates.add(dvd.getReleaseDate());
+        }
+
+        LocalDate newest = dates.stream()
+                .max(Comparator.comparing(LocalDate::toEpochDay)).get();
+
+        List<DVD> newestDVDs = dvds.stream()
+                .filter((dvd -> dvd.getReleaseDate().isEqual(newest)))
+                .collect(Collectors.toList());
+
+        return newestDVDs;
+
     }
 
 

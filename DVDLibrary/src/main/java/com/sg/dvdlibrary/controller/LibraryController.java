@@ -98,7 +98,6 @@ public class LibraryController {
             while (keepGoing) {
                 menuSelection = view.printSearchMenuAndGetSelection();
 
-                DVD dvd = dao.getDVD("Joker");
                 switch(menuSelection) {
                     case 1:
                         searchByNYears();
@@ -110,13 +109,13 @@ public class LibraryController {
                         searchByDirectorName();
                         break;
                     case 4:
-                        System.out.println("studio");
+                        searchByStudio();
                         break;
                     case 5:
-                        System.out.println("newest");
+                        searchForNewest();
                         break;
                     case 6:
-                        System.out.println("oldest");
+                        searchForOldest();
                         break;
                     case 7:
                         keepGoing = false;
@@ -233,6 +232,25 @@ public class LibraryController {
         view.displaySearchResultBanner();
         String directorName = view.printAndCollectDN();
         List<DVD> searchResults = dao.findByDirector(directorName);
+        view.displaySearchResults(searchResults);
+    }
+
+    private void searchByStudio() throws DVDLibraryDaoException {
+        view.displaySearchResultBanner();
+        String studio = view.printAndCollectStudio();
+        List<DVD> searchResults = dao.findByStudio(studio);
+        view.displaySearchResults(searchResults);
+    }
+
+    private void searchForOldest() throws DVDLibraryDaoException {
+        view.displaySearchResultBanner();
+        List<DVD> searchResults = dao.findOldest();
+        view.displaySearchResults(searchResults);
+    }
+
+    private void searchForNewest() throws DVDLibraryDaoException {
+        view.displaySearchResultBanner();
+        List<DVD> searchResults = dao.findNewest();
         view.displaySearchResults(searchResults);
     }
 

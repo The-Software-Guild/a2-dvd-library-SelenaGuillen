@@ -241,6 +241,10 @@ public class DVDLibraryView {
     public String printAndCollectDN() {
         return io.readString("Please enter the director's name");
     }
+    public String printAndCollectStudio() {
+        return io.readString("Please enter the studio's name");
+    }
+
     public void displayExitBanner() {
         io.print("Good Bye!");
     }
